@@ -1,6 +1,8 @@
 # Optimizer-PyTorch
 Package of Optimizer implemented with PyTorch .
 
+## Optimizer Lists
+
 ### SGD: stochastic gradient descent
 - https://github.com/pytorch/pytorch/blob/master/torch/optim/sgd.py
 
@@ -34,7 +36,7 @@ Package of Optimizer implemented with PyTorch .
  - https://github.com/GauthierGidel/Variational-Inequality-GAN/blob/master/optim/extragradient.py
 
 
-### Others
+## Others
  - https://ruder.io/optimizing-gradient-descent/index.html
  - https://github.com/lifeiteng/Optimizers
  - http://stanford.edu/~boyd/
