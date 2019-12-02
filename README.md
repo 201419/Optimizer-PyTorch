@@ -19,7 +19,21 @@ Package of Optimizer implemented with PyTorch .
 ### Lookahead: Lookahead Optimizer: k steps forward, 1 step back
  - https://arxiv.org/abs/1907.08610
 
+### Optimistic
+
+ - https://github.com/bruno-31/diff-game/blob/master/optimizers.py
+
+### OptimAdam
+
+ - https://github.com/kojino/GAN-Convergence/blob/master/script/optimizer.py
+
+### OMD
+
+ - https://github.com/GauthierGidel/Variational-Inequality-GAN/blob/master/optim/omd.py
+
 ### ExtraGradient
+
+ - https://github.com/GauthierGidel/Variational-Inequality-GAN/blob/master/optim/extragradient.py
 
 
 ### Others
