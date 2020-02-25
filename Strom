@@ -1,0 +1,68 @@
+import torch
+from .optimizer import Optimizer
+
+
+class Storm(Optimizer):
+    r"""Implements stochastic
+    """
+
+    def __init__(self, params, k=0.1, w=10, c=0.01, weight_decay=0):
+        if k < 0.0:
+            raise ValueError("Invalid k value: {}".format(k))
+        if w < 0.0:
+            raise ValueError("Invalid w value: {}".format(w))
+        if c < 0.0:
+            raise ValueError('Invalid c value:{}'.format(c))
+
+        defaults = dict(k=k, w=w, c=c, weight_decay=weight_decay)
+
+        super(Storm, self).__init__(params, defaults)
+
+    def __setstate__(self, state):
+        super(Storm, self).__setstate__(state)
+
+
+    def step(self, closure=None):
+        """Performs a single optimization step.
+
+        Arguments:
+            closure (callable, optional): A closure that reevaluates the model
+                and returns the loss.
+        """
+        loss = None
+        if closure is not None:
+            loss = closure()
+
+        for group in self.param_groups:
+            k = group['k']
+            w = group['w']
+            c = group['c']
+            weight_decay = group['weight_decay']
+
+            for p in group['params']:
+                if p.grad is None:
+                    continue
+                d_p = p.grad.data
+                if weight_decay != 0:
+                    d_p.add_(weight_decay, p.data)
+                param_state = self.state[p]
+
+                if len(param_state)==0:
+                    param_state['last_data'] = torch.clone(d_p).detach()
+                    buf = param_state['momentum_buffer'] = torch.clone(d_p).detach()
+                    param_state['accumulated_grad_size'] = torch.norm(torch.clone(d_p).detach())
+                    param_state['lr'] = k/(pow((w+pow(param_state['accumulated_grad_size'],2)),1/3))
+                    param_state['momentum'] = c * pow(param_state['lr'], 2)
+                else:
+                    buf = param_state['momentum_buffer']
+                    accumulated_grad_size = param_state['accumulated_grad_size']
+                    accumulated_grad_size.add_(pow(torch.norm(d_p), 2))
+                    param_state['lr'] = k / (pow((w + pow(param_state['accumulated_grad_size'], 2)), 1 / 3))
+                    param_state['momentum'] = c * pow(param_state['lr'], 2)
+                    # print(param_state['momentum'])
+                    buf.mul_(1 - param_state['momentum']).add_(param_state['momentum'] , param_state['last_data']).add_(d_p)
+                    # buf.mul_(1-param_state['momentum']).add_(param_state['momentum']-1,d_p)
+                    param_state['last_data']=d_p
+                    d_p = buf
+                p.data.add_(-param_state['lr'], d_p)
+        return loss
