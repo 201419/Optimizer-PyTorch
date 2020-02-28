@@ -35,6 +35,10 @@ Package of Optimizer implemented with PyTorch .
 ### ExtraGradient
  - https://github.com/GauthierGidel/Variational-Inequality-GAN/blob/master/optim/extragradient.py
 
+### STORM: STOchastic Recursive Momentum
+ - < Momentum-Based Variance Reduction in Non-Convex SGD >
+ - http://papers.nips.cc/paper/9659-momentum-based-variance-reduction-in-non-convex-sgd
+ - https://github.com/google-research/google-research/blob/master/storm_optimizer/storm_optimizer.py (TensorFlow)
 
 ## Others
  - https://ruder.io/optimizing-gradient-descent/index.html
